@@ -8,6 +8,7 @@ from os import getenv
 
 storage_type = getenv("HBNB_TYPE_STORAGE")
 
+
 class State(BaseModel, Base):
     """ State class"""
     __tablename__ = 'states'
@@ -16,7 +17,6 @@ class State(BaseModel, Base):
         cities = relationship('City', cascade="all,delete", backref="state")
     else:
         name = ""
-
 
         @property
         def cities(self):
@@ -29,4 +29,3 @@ class State(BaseModel, Base):
                 if city.state_id == self.id:
                     related_cities.append(city)
             return related_cities
-
