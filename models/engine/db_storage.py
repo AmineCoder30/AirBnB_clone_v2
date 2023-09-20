@@ -50,14 +50,14 @@ class DBStorage:
                    City, Amenity, Review]
         if cls is not None:
             for obj in self.__session.query(cls).all():
-                kyNm = ClassName + "." + obj.id
-                ClassName = obj.__class__.__name__
+                ClsNme = obj.__class__.__name__
+                kyNm = ClsNme + "." + obj.id
                 result[kyNm] = obj
         else:
             for classe in classes:
                 for obj in self.__session.query(classe).all():
-                    kyNm = ClassName + "." + obj.id
-                    ClassName = obj.__class__.__name__
+                    ClsNme = obj.__class__.__name__
+                    kyNm = ClsNme + "." + obj.id
                     result[kyNm] = obj
         return result
 
