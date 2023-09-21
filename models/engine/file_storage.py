@@ -12,16 +12,28 @@ class FileStorage:
         """Return a dic"""
         myDiction = {}
         seconddic = self.__objects
-        clsName = cls.__name__
         if cls:
+            clsName = cls.__name__
             for k in seconddic:
                 prtion = k.replace('.', ' ')
                 prtion = shlex.split(prtion)
                 if (prtion[0] == clsName):
-                    myDiction[k] = seconddic[k]
+                    secddic = self.__objects
+                    myDiction[k] = secddic[k]
             return (myDiction)
         else:
             return seconddic
+    def delete(self, obj=None):
+        ''' deletes the object from the attribute
+        '''
+        if obj is None:
+            return
+        objDic = obj.to_dict()['__class__']
+        kyOb = objDic + '.' + obj.id
+        allKeys = self.__objects.keys()
+        if kyOb in allKeys:
+            objTODel = self.__objects[kyOb]
+            del objTODel
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -59,11 +71,3 @@ class FileStorage:
                         self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
-    def delete(self, obj=None):
-        ''' deletes the object from the attribute
-        '''
-        if obj is None:
-            return
-        kyOb = obj.to_dict()['__class__'] + '.' + obj.id
-        if kyOb in self.__objects.keys():
-            del self.__objects[kyOb]
