@@ -3,6 +3,7 @@
 import json
 import shlex
 
+
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
     __file_path = 'file.json'
@@ -23,6 +24,7 @@ class FileStorage:
             return (myDiction)
         else:
             return seconddic
+
     def delete(self, obj=None):
         ''' deletes the object from the attribute
         '''
@@ -68,6 +70,6 @@ class FileStorage:
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                        self.all()[key] = classes[val['__class__']](**val)
+                    self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
