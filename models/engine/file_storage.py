@@ -3,31 +3,27 @@
 import json
 import shlex
 
-
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
     __file_path = 'file.json'
     __objects = {}
 
     def all(self, cls=None):
-        """Return a dic"""
-        myDiction = {}
-        seconddic = self.__objects
+        """Returns a dictionary of models currently in storage"""
+        dic = {}
         if cls:
-            clsName = cls.__name__
-            for k in seconddic:
-                prtion = k.replace('.', ' ')
-                prtion = shlex.split(prtion)
-                if (prtion[0] == clsName):
-                    secddic = self.__objects
-                    myDiction[k] = secddic[k]
-            return (myDiction)
+            dictionary = self.__objects
+            for key in dictionary:
+                partition = key.replace('.', ' ')
+                partition = shlex.split(partition)
+                if (partition[0] == cls.__name__):
+                    dic[key] = self.__objects[key]
+            return (dic)
         else:
-            return seconddic
-
+            return self.__objects
+    
     def delete(self, obj=None):
-        ''' deletes the object from the attribute
-        '''
+        ''' deletes the object'''
         if obj is None:
             return
         objDic = obj.to_dict()['__class__']
@@ -36,6 +32,7 @@ class FileStorage:
         if kyOb in allKeys:
             objTODel = self.__objects[kyOb]
             del objTODel
+
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -70,10 +67,6 @@ class FileStorage:
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                    self.all()[key] = classes[val['__class__']](**val)
+                        self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
-
-    def close(self):
-        """ reload method"""
-        self.reload()
