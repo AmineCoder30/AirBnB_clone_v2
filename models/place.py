@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
+from sqlalchemy import Column, Integer, String, ForeignKey, Float, Table
 from sqlalchemy.orm import relationship
 from models.amenity import Amenity
 from models.review import Review
-from sqlalchemy import Column, Integer, String, ForeignKey, Float, Table
 from os import getenv
 
 storage_type = getenv("HBNB_TYPE_STORAGE")
@@ -13,14 +13,18 @@ place_amenity = Table(
     "place_amenity",
     Base.metadata,
     Column(
-        "place_id", String(60),
+        "place_id",
+        String(60),
         ForeignKey("places.id"),
-        primary_key=True, nullable=False,
+        primary_key=True,
+        nullable=False,
     ),
     Column(
-        "amenity_id", String(60),
+        "amenity_id",
+        String(60),
         ForeignKey("amenities.id"),
-        primary_key=True, nullable=False,
+        primary_key=True,
+        nullable=False,
     ),
 )
 
@@ -30,29 +34,20 @@ class Place(BaseModel, Base):
 
     __tablename__ = "places"
     if storage_type == "db":
-        city_id = Column(String(60),
-                         ForeignKey("cities.id"),
-                         nullable=False)
-        user_id = Column(String(60), 
-                         ForeignKey("users.id"),
-                         nullable=False)
+        city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
+        user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
         name = Column(String(128), nullable=False)
         description = Column(String(1024), nullable=True)
-        number_rooms = Column(Integer,
-                              nullable=False, default=0)
-        number_bathrooms = Column(Integer,
-                                  nullable=False, default=0)
-        max_guest = Column(Integer,
-                           nullable=False, default=0)
+        number_rooms = Column(Integer, nullable=False, default=0)
+        number_bathrooms = Column(Integer, nullable=False, default=0)
+        max_guest = Column(Integer, nullable=False, default=0)
         price_by_night = Column(Integer, nullable=False, default=0)
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
-        amenities = relationship("Amenity",
-                                 secondary=place_amenity,
+        amenities = relationship("Amenity", secondary=place_amenity,
                                  viewonly=False,
                                  back_populates="place_amenities")
-        reviews = relationship('Review', cascade="all,delete",
-                               backref="place")
+        reviews = relationship('Review', cascade="all,delete", backref="place")
 
     else:
         city_id = ""
@@ -69,28 +64,28 @@ class Place(BaseModel, Base):
 
         @property
         def amenities(self):
-            """Getter doc"""
+            """Getter docuemnt"""
             from models import storage
-            lsAmen = []
-            lsAmenAL = storage.all(Amenity)
-            for amenity in lsAmenAL.values():
+            amenitiesList = []
+            amenitiesAll = storage.all(Amenity)
+            for amenity in amenitiesAll.values():
                 if amenity.id in self.amenity_ids:
-                    lsAmen.append(amenity)
-            return lsAmen
+                    amenitiesList.append(amenity)
+            return amenitiesList
 
         @property
         def reviews(self):
-            """Getter doc"""
+            """Getter document"""
             from models import storage
-            lsREv = []
-            lsREvAl = storage.all(Review)
-            for review in lsREvAl.values():
+            reviewsList = []
+            reviewsAll = storage.all(Review)
+            for review in reviewsAll.values():
                 if review.place_id in self.id:
-                    lsREv.append(review)
-            return lsREv
+                    reviewsList.append(review)
+            return reviewsList
 
         @amenities.setter
         def amenities(self, amenity):
-            """Setter doc"""
+            """Setter document"""
             if isinstance(amenity, Amenity):
                 self.amenity_ids.append(amenity.id)
