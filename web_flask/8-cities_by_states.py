@@ -6,10 +6,9 @@ from models import storage
 from models.state import State
 
 app = Flask(__name__)
-app.url_map.strict_slashes = False
 
 
-@app.route("/cities_by_states")
+@app.route("/cities_by_states", strict_slashes = False)
 def cities_by_states():
     """script that starts a Flask web applicatio and get all 
     items states"""
