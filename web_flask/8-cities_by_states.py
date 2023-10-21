@@ -11,7 +11,8 @@ app.url_map.strict_slashes = False
 
 @app.route("/cities_by_states")
 def cities_by_states():
-    """ """
+    """script that starts a Flask web applicatio and get all 
+    items states"""
     states = storage.all(State)
     states = dict(sorted(states.items(), key=lambda item: item[1].name))
     return render_template("8-cities_by_states.html", states=states)
